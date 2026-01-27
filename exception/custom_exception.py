@@ -42,7 +42,7 @@ class DocumentPortalException(Exception):
         return f"{base}\nTraceback:\n{self.traceback_str}" if self.traceback_str else base
 
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
     # Demo-1: generic exception -> wrap
     # try:
     #     a = 1 / 0

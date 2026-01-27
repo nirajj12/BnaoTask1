@@ -1,0 +1,1 @@
+{"config_path": "configs/config.yaml", "error": "[Errno 2] No such file or directory: 'configs/config.yaml'", "timestamp": "2026-01-27T16:55:24.954869Z", "level": "error", "event": "config_load_failed"}
