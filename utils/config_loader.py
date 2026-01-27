@@ -23,5 +23,5 @@ def load_config(config_path: str = "config/config.yaml") -> dict:
             error=str(e)
         )
         raise DocumentPortalException("Failed to load configuration", e) from e
-if __name__ == "__main__":
-    load_config("config/config.yaml")
+# if __name__ == "__main__":
+#     load_config("config/config.yaml")

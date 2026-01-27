@@ -1,0 +1,1 @@
+{"missing_vars": ["GROQ_API_KEY", "GOOGLE_API_KEY", "HF_TOKEN"], "timestamp": "2026-01-27T17:29:14.793639Z", "level": "error", "event": "missing_environment_variables"}

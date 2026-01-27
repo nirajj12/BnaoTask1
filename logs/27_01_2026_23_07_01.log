@@ -1,0 +1,5 @@
+{"available_keys": ["GROQ_API_KEY", "GOOGLE_API_KEY", "HF_TOKEN"], "timestamp": "2026-01-27T17:37:01.366856Z", "level": "info", "event": "environment_variables_validated"}
+{"config_path": "config/config.yaml", "timestamp": "2026-01-27T17:37:01.368572Z", "level": "info", "event": "config_loaded"}
+{"config_keys": ["faiss_db", "embedding_model", "chunking", "retriever", "llm"], "timestamp": "2026-01-27T17:37:01.368654Z", "level": "info", "event": "configuration_loaded"}
+{"model": "sentence-transformers/all-MiniLM-L6-v2", "timestamp": "2026-01-27T17:37:01.368711Z", "level": "info", "event": "loading_embedding_model"}
+{"error": "Could not import sentence_transformers python package. Please install it with `pip install sentence-transformers`.", "timestamp": "2026-01-27T17:37:01.369313Z", "level": "error", "event": "embedding_model_load_failed"}
