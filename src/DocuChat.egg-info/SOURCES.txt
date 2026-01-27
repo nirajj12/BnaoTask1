@@ -1,0 +1,6 @@
+README.md
+pyproject.toml
+src/DocuChat.egg-info/PKG-INFO
+src/DocuChat.egg-info/SOURCES.txt
+src/DocuChat.egg-info/dependency_links.txt
+src/DocuChat.egg-info/top_level.txt
