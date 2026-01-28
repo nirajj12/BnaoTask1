@@ -7,7 +7,17 @@ from exception.custom_exception import DocumentPortalException
 
 from langchain_groq import ChatGroq
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_community.embeddings import HuggingFaceEmbeddings
+
+# Prefer the new langchain-huggingface package, fall back to community embeddings
+try:  # pragma: no cover - import-time behavior
+    from langchain_huggingface import (
+        HuggingFaceEmbeddings as LCHuggingFaceEmbeddings,
+    )
+except ImportError:  # Fallback for environments without langchain-huggingface installed yet
+    from langchain_community.embeddings import (
+        HuggingFaceEmbeddings as LCHuggingFaceEmbeddings,
+    )
+    
 
 
 log = CustomLogger().get_logger(__name__)
@@ -53,9 +63,11 @@ class ModelLoader:
         try:
             model_name = self.config["embedding_model"]["model_name"]
 
-            log.info("loading_embedding_model",model=model_name)
+            log.info("loading_embedding_model", model=model_name)
 
-            return HuggingFaceEmbeddings(model_name=model_name)
+            # Use the non-deprecated langchain-huggingface class when available,
+            # otherwise fall back to the community implementation.
+            return LCHuggingFaceEmbeddings(model_name=model_name)
 
         except Exception as e:
             log.error("embedding_model_load_failed",error=str(e))

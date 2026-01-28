@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DocuChat – RAG Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>📄 DocuChat</h2>
+
+      <div class="section">
+        <label>Upload Documents</label>
+        <input id="files" type="file" multiple accept=".pdf,.docx,.txt" />
+        <input id="session" type="text" placeholder="Session ID (optional)" />
+        <button id="btn-index">Index Documents</button>
+        <p id="index-status" class="muted"></p>
+      </div>
+
+      <div class="section">
+        <label>Top-K</label>
+        <input id="topk" type="number" value="5" min="1" max="20" />
+      </div>
+    </aside>
+
+    <!-- Chat Area -->
+    <main class="chat">
+      <div id="chat-window" class="chat-window">
+        <div class="message assistant">
+          👋 Upload documents and ask questions based on them.
+        </div>
+      </div>
+
+      <div class="chat-input">
+        <input
+          id="question"
+          type="text"
+          placeholder="Ask a question about your documents..."
+        />
+        <button id="btn-ask">Send</button>
+      </div>
+    </main>
+
+  </div>
+
+<script>
+const API = ""  // same origin
+let CURRENT_SESSION = null;
+
+// -------- Index Documents --------
+document.getElementById("btn-index").onclick = async () => {
+  const files = document.getElementById("files").files;
+  const session = document.getElementById("session").value.trim();
+  const status = document.getElementById("index-status");
+
+  if (!files.length) {
+    status.textContent = "Please select at least one file.";
+    return;
+  }
+
+  const fd = new FormData();
+  [...files].forEach(f => fd.append("files", f));
+  if (session) fd.append("session_id", session);
+
+  status.textContent = "Indexing documents…";
+
+  const res = await fetch(`${API}/chat/index`, {
+    method: "POST",
+    body: fd
+  });
+
+  const json = await res.json();
+  CURRENT_SESSION = json.session_id || session;
+  status.textContent = `Indexed. Session: ${CURRENT_SESSION}`;
+};
+
+// -------- Ask Question --------
+document.getElementById("btn-ask").onclick = async () => {
+  const q = document.getElementById("question").value.trim();
+  const topk = document.getElementById("topk").value;
+  const chat = document.getElementById("chat-window");
+
+  if (!q) return;
+  if (!CURRENT_SESSION) {
+    alert("Please index documents first.");
+    return;
+  }
+
+  chat.innerHTML += `<div class="message user">${q}</div>`;
+  document.getElementById("question").value = "";
+
+  const fd = new FormData();
+  fd.append("question", q);
+  fd.append("session_id", CURRENT_SESSION);
+  fd.append("top_k", topk);
+
+  const res = await fetch(`${API}/chat/query`, {
+    method: "POST",
+    body: fd
+  });
+
+  const json = await res.json();
+
+  chat.innerHTML += `<div class="message assistant">${json.answer}</div>`;
+  chat.scrollTop = chat.scrollHeight;
+};
+</script>
+</body>
+</html>
